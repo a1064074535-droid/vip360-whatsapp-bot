@@ -30,29 +30,48 @@ const govServices = `🏛️ *الخدمات الحكومية*
 
 app.post('/webhook', (req, res) => {
   const twiml = new MessagingResponse();
-  const incomingMsg = (req.body.Body || '').trim();
-  const from = req.body.From || '';
-
+  // دعم كلا من النص العادي والصوت
+  const incomingMsg = (req.body.Body || req.body.body || '').trim().replace(/\s+/g, ' ');
   let responseText = '';
-
   const msg = incomingMsg.toLowerCase();
 
-  if (msg === 'مرحبا' || msg === 'hi' || msg === 'hello' || msg === 'السلام عليكم' || msg === 'هلا' || msg === 'start' || msg === '0') {
+  if (msg === 'مرحبا' || msg === 'hi' || msg === 'hello' || msg === 'السلام عليكم' || msg === 'هلا' || msg === 'start' || msg === '0' || msg === '') {
     responseText = mainMenu;
   } else if (msg === '1') {
     responseText = govServices;
   } else if (msg === '2') {
-    responseText = `📚 *المكتبة الرقمية*\n\nتصفح وحمل آلاف الكتب والموارد التعليمية.\n🔗 https://vip360.netlify.app\n\nاكتب *رجوع* للعودة`;
+    responseText = `📚 *المكتبة الرقمية*
+
+تصفح وحمل آلاف الكتب والموارد التعليمية.
+🔗 https://vip360.netlify.app
+
+اكتب *رجوع* للعودة`;
   } else if (msg === '3') {
-    responseText = `📝 *بناء سيرة ذاتية*\n\nأنشئ سيرتك الذاتية باحترافية مع تحليل ATS.\n🔗 https://vip360.netlify.app/cv\n\nاكتب *رجوع* للعودة`;
+    responseText = `📝 *بناء سيرة ذاتية*
+
+أنشئ سيرتك الذاتية باحترافية مع تحليل ATS.
+🔗 https://vip360.netlify.app/cv
+
+اكتب *رجوع* للعودة`;
   } else if (msg === '4') {
-    responseText = `🛠️ *دعم فني*\n\nسنتواصل معك خلال 24 ساعة.\nيرجى وصف مشكلتك بالتفصيل.\n\nاكتب *رجوع* للعودة`;
+    responseText = `🛠️ *دعم فني*
+
+سنتواصل معك خلال 24 ساعة.
+يرجى وصف مشكلتك بالتفصيل.
+
+اكتب *رجوع* للعودة`;
   } else if (msg === '5') {
-    responseText = `📞 *تواصل معنا*\n\nبريد: support@vip360.sa\nواتساب: https://wa.me/9665XXXXXXXX\nالموقع: https://vip360.netlify.app\n\nاكتب *رجوع* للعودة`;
-  } else if (msg === 'رجوع' || msg === 'back' || msg === 'menu') {
+    responseText = `📞 *تواصل معنا*
+
+بريد: support@vip360.sa
+الموقع: https://vip360.netlify.app
+
+اكتب *رجوع* للعودة`;
+  } else if (msg === 'رجوع' || msg === 'back' || msg === 'menu' || msg === 'قائمة') {
     responseText = mainMenu;
   } else {
-    responseText = `عذراً، لم أفهم طلبك. 🤔\nاكتب *مرحبا* أو *0* لعرض القائمة الرئيسية`;
+    responseText = `عذراً، لم أفهم طلبك. 🤔
+اكتب *مرحبا* أو *0* لعرض القائمة الرئيسية`;
   }
 
   twiml.message(responseText);
@@ -61,7 +80,7 @@ app.post('/webhook', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('VIP360 WhatsApp Bot is running!');
+  res.send('VIP360 WhatsApp Bot is running! ✅');
 });
 
 app.listen(PORT, () => {
